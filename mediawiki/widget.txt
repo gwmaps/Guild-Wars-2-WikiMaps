@@ -1,0 +1,29 @@
+<noinclude>
+	This is the code for the Widget itself, you may want to change the default language (1=de, 2=en, 3=es, 4=fr)
+	and possibly make the regex for polylines more restrictive like \w -> a-z. The marker regex should accept an URL
+	so that you can add custom marker icons - best way here would be to allow only local or relative URLs so that a
+	user needs to upload the icon to the wiki.
+
+	see also:
+	http://www.mediawiki.org/wiki/Extension:Widgets#Validate_modifier
+	http://www.smarty.net/docsv2/en/language.modifier.regex.replace.tpl
+</noinclude>
+<includeonly>
+<div class="gw2map"
+	data-language="<!--{$lang|validate:int|default:1}-->"
+	data-disable_controls="<!--{$disable_controls|validate:int|default:0}-->"
+	data-continent_id="<!--{$continent_id|validate:int|default:1}-->"
+	data-floor_id="<!--{$floor_id|validate:int|default:2}-->"
+	data-region_id="<!--{$region_id|validate:int|default:-1}-->"
+	data-map_id="<!--{$map_id|validate:int|default:-1}-->"
+	data-poi_id="<!--{$poi_id|validate:int|default:-1}-->"
+	data-poi_type="<!--{$poi_type|validate:int|default:-1}-->"
+	data-width="<!--{$width|validate:int|default:800}-->"
+	data-w_percent="<!--{$w_percent|validate:int|default:0}-->"
+	data-height="<!--{$height|validate:int|default:450}-->"
+	data-h_percent="<!--{$h_percent|validate:int|default:0}-->"
+	data-linkbox="<!--{$linkbox|validate:int|default:0}-->"
+	data-polyline="<!--{$polyline|regex_replace:"#[^,;=\-\d\s\w]#":""}-->">
+	data-markers="<!--{$markers|regex_replace:"#[^,;=\-\d\s\w]#":""}-->">
+</div>
+</includeonly>
