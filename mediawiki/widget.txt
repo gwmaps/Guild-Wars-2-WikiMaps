@@ -23,7 +23,7 @@
 	data-height="<!--{$height|validate:int|default:450}-->"
 	data-h_percent="<!--{$h_percent|validate:int|default:0}-->"
 	data-linkbox="<!--{$linkbox|validate:int|default:0}-->"
-	data-polyline="<!--{$polyline|regex_replace:"#[^,;=\-\d\s\w]#":""}-->">
+	data-polyline="<!--{$polyline|regex_replace:"#[^,;=\-\d\s\w]#":""}-->"
 	data-markers="<!--{$markers|regex_replace:"#[^,;=\-\d\s\w]#":""}-->">
 </div>
 </includeonly>
