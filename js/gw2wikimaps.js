@@ -1,3 +1,22 @@
+/**
+ * Awesome wiki maps by Smiley
+ *
+ * based on Cliff's example
+ * http://jsfiddle.net/cliff/CRRGC/
+ *
+ * and Dr. Ishmaels proof of concept
+ * http://wiki.guildwars2.com/wiki/User:Dr_ishmael/leaflet
+ *
+ * included in this file:
+ *
+ * (minified) excerpts from phpJS
+ * http://phpjs.org
+ *
+ * Leaflet polyline decorator
+ * https://github.com/bbecquet/Leaflet.PolylineDecorator
+ *(c) 2013 Benjamin Becquet
+ *
+ */
 
 var GW2Maps = {
 	/**
@@ -117,18 +136,22 @@ var GW2Maps = {
 
 		// get the JSON and start the action ($.getJSON turned out to be pretty unstable...)
 		$.ajax({url: "https://api.guildwars2.com/v1/map_floor.json?continent_id="+options.continent_id+"&floor="+options.floor_id+"&lang="+options.i18n.lang, dataType: "json", success: function(floordata){
-			// TODO get event data in a seperate request only if desired?
-			$.ajax({url: "https://api.guildwars2.com/v1/event_details.json?lang="+options.i18n.lang, dataType: "json", success: function(event_response){//async: false,
-				// get that event_details.json sorted by map
-				var eventdata = {};
-				$.each(event_response.events, function(i,e){
-					if(typeof eventdata[e.map_id] === "undefined"){
-						eventdata[e.map_id] = {};
-					}
-					eventdata[e.map_id][i] = e;
-				});
-				GW2Maps.parse_response(mapobject, options, floordata, eventdata);
-			}});
+			if(options.event_data){
+				$.ajax({url: "https://api.guildwars2.com/v1/event_details.json?lang="+options.i18n.lang, dataType: "json", success: function(event_response){//async: false,
+					// get that event_details.json sorted by map
+					var eventdata = {};
+					$.each(event_response.events, function(i,e){
+						if(typeof eventdata[e.map_id] === "undefined"){
+							eventdata[e.map_id] = {};
+						}
+						eventdata[e.map_id][i] = e;
+					});
+					GW2Maps.parse_response(mapobject, options, floordata, eventdata);
+				}});
+			}
+			else{
+				GW2Maps.parse_response(mapobject, options, floordata, {});
+			}
 		}}).fail(function(){
 			// if we don't get any floordata, we try at least to render the map
 			options.region_id = false;
@@ -286,12 +309,16 @@ var GW2Maps = {
 		}
 
 		// loop out the map points
-		mapobject.linkbox.append('<div class="header">'+map.name+'</div>');
+		if(options.linkbox){
+			mapobject.linkbox.append('<div class="header">'+map.name+'</div>');
+		}
 		$.each(pois, function(i,points){
 			// phpJS... <3
 			phpjs.array_multisort(sort[i], "SORT_ASC", points);
 			if(points.length > 0){
-				mapobject.linkbox.append('<div class="header sub">'+options.i18n[i]+'</div>');
+				if(options.linkbox){
+					mapobject.linkbox.append('<div class="header sub">'+options.i18n[i]+'</div>');
+				}
 				$.each(points, function(){
 					GW2Maps.parse_point(mapobject, options, this);
 				});
@@ -332,8 +359,10 @@ var GW2Maps = {
 			marker.bindPopup(point.popup);
 		}
 		mapobject.layers[options.i18n[point.type]].addLayer(marker);
-		mapobject.linkbox.append($('<div>'+(icon ? '<img src="'+icon.link+'" style="width:16px; height:16px" />' : '')+' '+point.text+'</div>')
-			.on("click", null, {coords: point.coords, text: point.popup}, pan));
+		if(options.linkbox){
+			mapobject.linkbox.append($('<div>'+(icon ? '<img src="'+icon.link+'" style="width:16px; height:16px" />' : '')+' '+point.text+'</div>')
+				.on("click", null, {coords: point.coords, text: point.popup}, pan));
+		}
 		// we have also a poi? lets find and display it...
 		if(options.poi_id && point.id === options.poi_id && options.poi_type && point.type === options.poi_type){
 			pan({data: {coords: point.coords, text: point.popup}});
@@ -411,6 +440,7 @@ var GW2Maps = {
 	 *     poi_id: non negative int,
 	 *     poi_type: int (1=landmark, 2=sector, 3=skill, 4=task, 5=vista, 6=waypoint),
 	 *     disable_controls: bool,
+	 *     disable_eventdata: bool,
 	 *     width: non negative int,
 	 *     w_percent: bool,
 	 *     height: non negative int,
@@ -453,6 +483,7 @@ var GW2Maps = {
 			width: typeof dataset.width === "number" && dataset.width > 0 ? dataset.width+(dataset.w_percent == true ? "%" : "px") : "800px",
 			height: typeof dataset.height === "number" && dataset.height > 0 ? dataset.height+(dataset.h_percent == true ? "%" : "px") : "450px",
 			map_controls: dataset.disable_controls != true,
+			event_data: dataset.disable_eventdata != true,
 			linkbox: typeof dataset.linkbox === "number" && dataset.linkbox >= 100 ? dataset.linkbox+"px" : false,
 			polyline: dataset.polyline && dataset.polyline.length > 7 ? dataset.polyline : false,
 			markers: dataset.markers && dataset.markers.length > 2 ? dataset.markers : false,

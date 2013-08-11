@@ -12,6 +12,7 @@
 <div class="gw2map"
 	data-language="<!--{$lang|validate:int|default:1}-->"
 	data-disable_controls="<!--{$disable_controls|validate:int|default:0}-->"
+	data-disable_eventdata="<!--{$disable_eventdata|validate:int|default:0}-->"
 	data-continent_id="<!--{$continent_id|validate:int|default:1}-->"
 	data-floor_id="<!--{$floor_id|validate:int|default:2}-->"
 	data-region_id="<!--{$region_id|validate:int|default:-1}-->"
@@ -24,6 +25,7 @@
 	data-h_percent="<!--{$h_percent|validate:int|default:0}-->"
 	data-linkbox="<!--{$linkbox|validate:int|default:0}-->"
 	data-polyline="<!--{$polyline|regex_replace:"#[^,;=\-\d\s\w]#":""}-->"
-	data-markers="<!--{$markers|regex_replace:"#[^,;=\-\d\s\w]#":""}-->">
+	data-markers="<!--{$markers|regex_replace:"#[^,;=\-\d\s\w]#":""}-->"
+	>
 </div>
 </includeonly>
