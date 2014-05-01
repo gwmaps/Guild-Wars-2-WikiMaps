@@ -5,8 +5,8 @@
 jQuery(document).ready(function(){
 	if($(".gw2map").length){
 		$.each([
-			"http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css",
-//			"http://cdn.leafletjs.com/leaflet-0.6.4/leaflet-ie.css",
+			"http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css",
+//			"http://cdn.leafletjs.com/leaflet-0.7.2/leaflet-ie.css",
 			"https://d1h9a8s8eodvjz.cloudfront.net/fonts/menomonia/08-02-12/menomonia.css",
 			"https://d1h9a8s8eodvjz.cloudfront.net/fonts/menomonia/08-02-12/menomonia-italic.css"
 		], function(){
@@ -17,7 +17,7 @@ jQuery(document).ready(function(){
 			document.getElementsByTagName("head")[0].appendChild(ref);
 		});
 		// The leaflet CDN does not yet provide SSL, so if the GW2 wikis finally switch to SSL, you'll need to store leaflet somewhere local
-		$.ajax("http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js", {cache:true, dataType:"script"}).done(function(){
+		$.ajax("http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js", {cache:true, dataType:"script"}).done(function(){
 			// You'll need to change the link to the actual URL where the widget's JS is stored.
 			// For easy maintenance it's a good idea to store it somewhere in the Widget namespace.
 			// You can find the latest (minified) versions including polyline decorator and the PhpJS excerpts on the german GW2 wiki:
