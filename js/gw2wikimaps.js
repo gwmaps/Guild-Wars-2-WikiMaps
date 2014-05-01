@@ -30,7 +30,7 @@ var GW2Maps = {
 		var options = GW2Maps.options(container),
 			mapobject = {
 				map: L.map(container, {
-//					minZoom: 0, // temporary fix for the "bounce bug", see https://github.com/Leaflet/Leaflet/issues/1908#issuecomment-21612283
+					minZoom: 0,
 					maxZoom: options.max_zoom,
 					crs: L.CRS.Simple,
 					zoomControl: options.map_controls,
@@ -58,7 +58,7 @@ var GW2Maps = {
 		// set the base tiles and add a little copyright info
 		L.tileLayer("https://tiles.guildwars2.com/{continent_id}/{floor_id}/{z}/{x}/{y}.jpg", {
 			errorTileUrl: options.i18n.errortile,
-//			minZoom: 0,
+			minZoom: 0,
 			maxZoom: options.max_zoom,
 			continuousWorld: true,
 			continent_id: options.continent_id,
@@ -150,7 +150,7 @@ var GW2Maps = {
 				}});
 			}
 			else{
-				GW2Maps.parse_response(mapobject, options, floordata, {});
+				GW2Maps.parse_response(mapobject, options, floordata, false);
 			}
 		}}).fail(function(){
 			// if we don't get any floordata, we try at least to render the map
@@ -463,7 +463,7 @@ var GW2Maps = {
 		var dataset = {};
 		$.each(container.attributes, function(){
 			if(this.name.match(/^data-/)){
-				dataset[this.name.substr(5)] = (this.name === "data-polyline" || this.name === "data-markers") ? this.value : phpjs.intval(this.value);
+				dataset[jQuery.camelCase(this.name.substr(5))] = (this.name === "data-polyline" || this.name === "data-markers") ? this.value : phpjs.intval(this.value);
 			}
 		});
 
