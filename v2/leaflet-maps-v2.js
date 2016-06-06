@@ -41,9 +41,11 @@ class GW2Map {
 		// draw the maps
 		fetch(this.options.mapUrl, {mode: 'cors'})
 			.then(r =>{
-				return r.status === 200
-					? Promise.resolve(r)
-					: Promise.reject(new Error(r.statusText));
+				if(r.status === 200){
+					return r;
+				}
+
+				throw new Error(r.statusText);
 			})
 			.then(r => r.json())
 			.then(r =>{
@@ -61,7 +63,7 @@ class GW2Map {
 					this.drawMap(r);
 				}
 				else{
-					Promise.reject(new Error(r))
+					return;
 				}
 
 				this.setView(r);
@@ -79,7 +81,7 @@ class GW2Map {
 						.then(r => r.forEach(objective => this.objectives[objective.id] = objective));
 				}
 
-
+				// markers, lines, ...
 
 			})
 			.catch(error => console.log('(╯°□°）╯彡┻━┻ ', error));
@@ -341,7 +343,7 @@ class GW2Map {
 					icon = images[objective.type];
 				}
 				else if(objective.type === 'Ruins'){
-					// todo: https://gitter.im/arenanet/api-cdi?at=5755be08c6414c76528c0500
+					// todo: https://github.com/arenanet/api-cdi/issues/328
 //					console.log(objective);
 				}
 
@@ -574,7 +576,7 @@ class GW2Map {
 		}
 
 		// set bounds and view
-		var bounds = this.rect2bounds(this.viewRect);//.pad(0.2);
+		var bounds = this.rect2bounds(this.viewRect).pad(0.1);
 
 		this.map.setMaxBounds(bounds);
 
