@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head >
+	<meta charset="UTF-8" >
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>GW2 Wiki Maps</title >
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+	<link rel="stylesheet" href="https://d1h9a8s8eodvjz.cloudfront.net/fonts/menomonia/08-02-12/menomonia.css">
+	<link rel="stylesheet" href="https://d1h9a8s8eodvjz.cloudfront.net/fonts/menomonia/08-02-12/menomonia-italic.css">
+	<style>
+		html, body{
+			margin: 0;
+			padding: 0;
+		}
+
+		.gw2map{
+			width: 1280px;
+			height: 720px;
+			margin: 10px 10px 0 10px;
+			background: #000;
+		}
+
+		.layer-contol-icon{
+			vertical-align: middle;
+			width: 16px;
+			height: 16px;
+			margin-right: 0.5em;
+		}
+
+		.region-label{
+			color: #fff;
+			font-family: Menomonia,sans-serif;
+			font-style: italic;
+			font-size: 28px;
+			white-space: nowrap;
+			text-align: center;
+		}
+
+		.map-label{
+			color: #fff;
+			font-family: Menomonia,sans-serif;
+			font-style: italic;
+			font-size: 20px;
+			white-space: nowrap;
+			text-align: center;
+		}
+
+		.sector-label{
+			color: #fff;
+			font-family: Menomonia,sans-serif;
+			font-style: italic;
+			font-size: 16px;
+			white-space: nowrap;
+			text-align: center;
+		}
+
+	</style>
+</head >
+<body >
+
+<div class="gw2map"
+     data-continent-id="1"
+     data-floor-id="1"
+     data-region-id="4"
+     data-map-id="15"
+     data-zoom="5"
+     data-center-coords=""
+     data-language="1"
+     data-map-controls="1"
+     data-polyline=""
+     data-markers=""
+></div>
+
+<div class="gw2map"
+     data-continent-id="2"
+     data-floor-id="3"
+     data-region-id="7"
+     data-map-id=""
+     data-zoom="3"
+     data-center-coords=""
+     data-language="0"
+     data-map-controls="1"
+     data-polyline=""
+     data-markers=""
+></div>
+
+<div class="gw2map"
+     data-continent-id="1"
+     data-floor-id="1"
+     data-region-id=""
+     data-map-id=""
+     data-zoom="3"
+     data-center-coords=""
+     data-language="4"
+     data-map-controls="1"
+     data-polyline=""
+     data-markers=""
+></div>
+
+
+<script src="https://cdn.rawgit.com/MaxArt2501/object-observe/master/dist/object-observe.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+<script src="leaflet-maps-v2.js"></script>
+<script>
+	'use strict';
+
+	(()=>{
+
+		// override L.TileLayer.getTileUrl() and add a custom tile getter
+		L.TileLayer.prototype.getTileUrl = function(coords){
+			var tileGetter = this.options.tileGetter;
+
+			if(typeof tileGetter === 'function'){
+				return tileGetter(coords, this._getZoomForUrl());
+			}
+
+			return false;
+		};
+
+		window.addEventListener('load', () =>{
+			var maps = [];
+			var containers = document.getElementsByClassName('gw2map');
+
+			for(var i = 0; i < containers.length; i++){
+				maps[i] = new GW2Map(containers[i], i);
+			}
+
+			console.log(maps);
+		});
+
+	})();
+</script>
+</body >
+</html >
